@@ -1,0 +1,71 @@
+package org.scec.useit.forecasting;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
+import org.opensha.sha.simulators.RSQSimEvent;
+
+import scratch.UCERF3.enumTreeBranches.DeformationModels;
+import scratch.UCERF3.enumTreeBranches.FaultModels;
+import scratch.kevin.simulators.RSQSimCatalog;
+import scratch.kevin.simulators.RSQSimCatalog.Loader;
+
+public class Ridgecrest_Forcast {
+	public static void probability(double instances,Loader loader ) throws IOException {
+		double eqs= 0;
+		for (RSQSimEvent event : loader.iterable()) {if(event.getMagnitude() < 6.5) {eqs++;}}
+		double prob = (instances/eqs)*100.0;
+		System.out.println("Probability of occurrening: "+ prob +"%");
+	}
+	public static void main(String[] args) throws IOException {
+		// input catalog dir. 
+		File catalogDir = new File("\\\\scecinternvault.usc.edu\\2019\\Catalogs2019\\Catalogs\\TeamA48Catalog\\bruce_catalog"); // change path per computer
+		// on windows, this would look something like: new File("C:\\Users\\intern\\<sub-dirs>...\\<catalog-dir>"
+
+		RSQSimCatalog catalog = new RSQSimCatalog(catalogDir, "eqs.planA.out", // change  file name based on catalog
+				FaultModels.FM3_1, DeformationModels.GEOLOGIC);
+		// UCERF3 fault and deformation model used as input to the simulation
+		// so far all have been FM 3.1/GEOLOGIC, you likely won't change these
+		
+		// now load the events using catalog.loader()
+		Loader loader = catalog.loader();
+
+		// you'll almost always want to filter them as they are loaded to reduce memory requirements.
+		
+		
+		loader.minMag(6.3); // min = 6.3
+		
+
+		// we usually skip the first 5k years to avoid spin up time
+		loader.skipYears(5000);
+		
+		// now read in the events, doing any calculations
+		int numH = 0;
+		int eventCount = 0;
+		double ridgecrest=0;
+		double startTime = Double.NaN;
+		double endTime = Double.NaN;
+		RSQSimEvent last = null ;
+		for (RSQSimEvent event : loader.iterable()) {
+			double timeYears = event.getTimeInYears();
+			if (eventCount == 0) {                     // Tests for first event in the catalog
+				startTime = timeYears;numH = 1;}
+			else if(eventCount != 0) { numH++;
+				endTime = timeYears;                  // sets current event year as the end year
+				double duration = endTime - startTime;
+				if(last.getMagnitude()<=6.5) { // compares magnitude of previous event, max = 6.5
+					if(duration <= .01923077 && event.getMagnitude() >= 7.1) {// whether or not anything 7.1 and over happens within a week 
+						ridgecrest++;			
+						System.out.println("Start year: "+ startTime+ "\n" + "End year: " + endTime + "\n" + "Duration: "+ duration + " years\n" + "magnitude" + event.getMagnitude() );
+				}}
+				
+			startTime = endTime;
+			}eventCount++; last = event;// to initialize first earthquake
+		}System.out.println("Total events: " + ridgecrest); probability(ridgecrest, loader);//
+	
+		
+	}
+	
+	
+}
