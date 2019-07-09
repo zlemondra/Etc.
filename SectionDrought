@@ -1,0 +1,100 @@
+package org.scec.useit.forecasting.droughts;
+
+import org.opensha.commons.param.ParameterList;
+import org.opensha.commons.param.impl.DoubleParameter;
+import org.opensha.sha.simulators.SimulatorEvent;
+
+public class SectionDrought extends DroughtType {
+	private ParameterList params;
+	private DoubleParameter minMagParam;
+	private String sectionName;
+	private double mag, duration;
+	
+	
+	public SectionDrought(SimulatorEvent event, double duration) {
+		if (event.getID() == 294 || event.getID() == 654 || event.getID() == 653 || event.getID() == 655) {//Northern Section SAF
+			if(event.getMagnitude()>= 7 && duration >= 100d) {
+				sectionName = "Northern Section SAF";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(7);
+				params.addParameter(minMagParam);
+			}
+		}
+		else if(event.getID() == 300 || event.getID() == 285 || event.getID() == 286 || event.getID() == 301 ) {// Southern Section SAF
+			if(event.getMagnitude()>= 7.5 && duration >= 150d) {
+				sectionName = "Southern Section SAF";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(7.5);
+				params.addParameter(minMagParam);
+			}
+		}
+		else if(event.getID() == 295 || event.getID() == 282 || event.getID() == 283 || event.getID() == 284) {// Southernmost Section SAF
+			if(event.getMagnitude()>= 7.5 && duration >= 200d) {
+				sectionName = "Southernmost Section SAF";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(7.5);
+				params.addParameter(minMagParam);
+			}
+		}
+		else if(event.getID() == 119 || event.getID() == 289) {//North SJF
+			if(event.getMagnitude()>= 6.7 && duration >= 100d) {
+				sectionName = "North SJF";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(6.7);
+				params.addParameter(minMagParam);
+			}
+		}
+		else if(event.getID() == 293) {//Anza Section SJF
+			if(event.getMagnitude()>= 6.7 && duration >= 250d) {
+				sectionName = "Anza Section SJF";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(6.7);
+				params.addParameter(minMagParam);
+			}
+		}
+		else if(event.getID() == 101 || event.getID() == 99) {//Southern SJF:  
+			if(event.getMagnitude()>= 6.7 && duration >= 175d) {
+				sectionName = "Southern SJF";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(6.7);
+				params.addParameter(minMagParam);
+			}
+		}
+		else if(event.getID() == 28) {//Southernmost SJF
+			if(event.getMagnitude()>= 6.7 && duration >= 300d) {
+				sectionName = "Southernmost SJF";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(6.7);
+				params.addParameter(minMagParam);
+			}
+		}
+		else if(event.getID() == 637 || event.getID() == 638 || event.getID() == 639) {//Hayward Fault
+			if(event.getMagnitude()>= 7 && duration >= 170d) {
+				sectionName = "Hayward Fault";
+				minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
+				minMagParam.setValue(7);
+				params.addParameter(minMagParam);
+			event.
+			}
+		}
+	}
+
+	@Override
+	public String getName() {
+		
+		return sectionName;
+	}
+
+	@Override
+	public boolean doesEventEndDrought(SimulatorEvent event) {
+		
+		return event.getMagnitude() >= minMagParam.getValue();
+	}
+
+	@Override
+	public ParameterList getParameters() {
+		
+		return params;
+	}
+
+}
