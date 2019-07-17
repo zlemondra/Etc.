@@ -35,7 +35,7 @@ public class DroughtCalculator {
 	private List<DroughtPeriod> droughts;
 	private double firstDroughtStart;
 	private double lastDroughtEnd;
-	/**
+	/**xx
 	 * total duration in years of all droughts. this is the entire catalog duration between the first and last drought-busting events
 	 */
 	private double totalDuration;
@@ -362,50 +362,53 @@ public class DroughtCalculator {
 		
 		// now load the events using catalog.loader()
 		Loader loader = catalog.loader();
-		/**
-		double forecastMinMag = 7.5d;
-		double droughtMinMag = 7.5;
-		double minDroughtDuration = 100d;
-		double forecastDuration = 30d;
-		DroughtType droughtType = new CatalogMinMagDroughtType(droughtMinMag);
+		
+		/** Definition 4: thirty Paleoseismic sites**/
+		
+		
+		double forecastMinMag4 = 6.5d;
+		double droughtMinMag4 = 6.5;
+		double minDroughtDuration4 = 100d;
+		double forecastDuration4 = 30d;
+		thirtySitesDrought droughtType4 = new thirtySitesDrought(droughtMinMag4, catalog);
 
 		// you'll almost always want to filter them as they are loaded to reduce memory requirements.
 		// set this as high as you can to do what you need
-		loader.minMag(Math.min(forecastMinMag, droughtMinMag));
+		loader.minMag(Math.min(forecastMinMag4, droughtMinMag4));
 
 		// we usually skip the first 5k years to avoid spin up time
-		loader.skipYears(5000);
+		//loader.skipYears(5000);
 		
 		// load all events above that minimum magnitude
 		System.out.println("Loading catalog...");
 		
 		
-		List<RSQSimEvent> events = loader.load();
-		System.out.println("Loaded "+events.size()+" events");
+		List<RSQSimEvent> events4 = loader.load();
+		events4 = droughtType4.systemSorter(events4, loader);
+		System.out.println("Loaded "+events4.size()+" events");
 		
-		DroughtCalculator calc = new DroughtCalculator(catalog.getElements(), events, droughtType);
+		DroughtCalculator calc4 = new DroughtCalculator(catalog.getElements(), events4, droughtType4);
 		
-		System.out.println("Droughts matching "+droughtType.getName()+" with minMag="+(float)droughtMinMag
-				+" and duration>="+(float)minDroughtDuration+": "+calc.getDroughtPeriods(minDroughtDuration).size());
-		System.out.println("Prob M>="+(float)forecastMinMag+" during drought: "
-				+(float)calc.getTotalEventProbDuringDrought(forecastMinMag, minDroughtDuration));
-		System.out.println("Prob M>="+(float)forecastMinMag+" "+(float)forecastDuration+" years after drought: "
-				+(float)calc.getTotalEventProbAfterDrought(forecastMinMag, minDroughtDuration, forecastDuration));
-		System.out.println("Prob M>="+(float)forecastMinMag+" "+(float)forecastDuration+" years after "+(float)minDroughtDuration+" drought years: "
-				+(float)calc.getTotalEventProbAfterDroughtYears(forecastMinMag, minDroughtDuration, forecastDuration));
-		System.out.println("Poisson (time independent) prob M>="+(float)forecastMinMag+" in "+(float)forecastDuration+" years: "
-				+(float)calc.getTimeIndependentProb(forecastMinMag, forecastDuration));
+		System.out.println("Droughts matching "+droughtType4.getName()+" with minMag="+(float)droughtMinMag4
+				+" and duration>="+(float)minDroughtDuration4+": "+calc4.getDroughtPeriods(minDroughtDuration4).size());
+		System.out.println("Prob M>="+(float)forecastMinMag4+" during drought: "
+				+(float)calc4.getTotalEventProbDuringDrought(forecastMinMag4, minDroughtDuration4));
+		System.out.println("Prob M>="+(float)forecastMinMag4+" "+(float)forecastDuration4+" years after drought: "
+				+(float)calc4.getTotalEventProbAfterDrought(forecastMinMag4, minDroughtDuration4, forecastDuration4));
+		System.out.println("Prob M>="+(float)forecastMinMag4+" "+(float)forecastDuration4+" years after "+(float)minDroughtDuration4+" drought years: "
+				+(float)calc4.getTotalEventProbAfterDroughtYears(forecastMinMag4, minDroughtDuration4, forecastDuration4));
+		System.out.println("Poisson (time independent) prob M>="+(float)forecastMinMag4+" in "+(float)forecastDuration4+" years: "
+				+(float)calc4.getTimeIndependentProb(forecastMinMag4, forecastDuration4));
 		// Additional probability outputs from FAST
-		System.out.println("Time independent prob M>="+(float)forecastMinMag+" of being in a drought for "+(float)minDroughtDuration+" years: "
-				+(float)calc.getTimeIndependentDroughtYearsProb(forecastDuration));
-		System.out.println("Time independent prob M>="+(float)forecastMinMag+" in an at least "+(float)minDroughtDuration+" year drought: "
-				+(float)calc.getTimeIndependentDroughtProb(forecastDuration));
+		System.out.println("Time independent prob M>="+(float)forecastMinMag4+" of being in a drought for "+(float)minDroughtDuration4+" years: "
+				+(float)calc4.getTimeIndependentDroughtYearsProb(forecastDuration4));
+		System.out.println("Time independent prob M>="+(float)forecastMinMag4+" in an at least "+(float)minDroughtDuration4+" year drought: "
+				+(float)calc4.getTimeIndependentDroughtProb(forecastDuration4));
 		
 		
-		float probRatio = ((float)calc.getTotalEventProbAfterDroughtYears(forecastMinMag, minDroughtDuration, forecastDuration))/((float)calc.getTimeIndependentProb(forecastMinMag, forecastDuration));
+		float probRatio4 = ((float)calc4.getTotalEventProbAfterDroughtYears(forecastMinMag4, minDroughtDuration4, forecastDuration4))/((float)calc4.getTimeIndependentProb(forecastMinMag4, forecastDuration4));
 		
-		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio);
-		**/
+		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio4);
 		/** Definition 3: Five Paleoseismic sites**/
 		
 		
@@ -455,6 +458,16 @@ public class DroughtCalculator {
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		/** Defintion 2: San Andreas Fault System**/
 		double forecastMinMag2 = 7.0d;
 		double droughtMinMag2 = 7.0;
@@ -499,6 +512,53 @@ public class DroughtCalculator {
 		float probRatio2 = ((float)calc2.getTotalEventProbAfterDroughtYears(forecastMinMag2, minDroughtDuration2, forecastDuration2))/((float)calc2.getTimeIndependentProb(forecastMinMag2, forecastDuration2));
 		
 		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio2);
-	}
+	
+		
+		
+		/** Defintion 1 */
+		double forecastMinMag = 7.5d;
+		double droughtMinMag = 7.5;
+		double minDroughtDuration = 100d;
+		double forecastDuration = 30d;
+		DroughtType droughtType = new CatalogMinMagDroughtType(droughtMinMag);
+
+		// you'll almost always want to filter them as they are loaded to reduce memory requirements.
+		// set this as high as you can to do what you need
+		loader.minMag(Math.min(forecastMinMag, droughtMinMag));
+
+		// we usually skip the first 5k years to avoid spin up time
+		loader.skipYears(5000);
+		
+		// load all events above that minimum magnitude
+		System.out.println("Loading catalog...");
+		
+		
+		List<RSQSimEvent> events = loader.load();
+		System.out.println("Loaded "+events.size()+" events");
+		
+		DroughtCalculator calc = new DroughtCalculator(catalog.getElements(), events, droughtType);
+		
+		System.out.println("Droughts matching "+droughtType.getName()+" with minMag="+(float)droughtMinMag
+				+" and duration>="+(float)minDroughtDuration+": "+calc.getDroughtPeriods(minDroughtDuration).size());
+		System.out.println("Prob M>="+(float)forecastMinMag+" during drought: "
+				+(float)calc.getTotalEventProbDuringDrought(forecastMinMag, minDroughtDuration));
+		System.out.println("Prob M>="+(float)forecastMinMag+" "+(float)forecastDuration+" years after drought: "
+				+(float)calc.getTotalEventProbAfterDrought(forecastMinMag, minDroughtDuration, forecastDuration));
+		System.out.println("Prob M>="+(float)forecastMinMag+" "+(float)forecastDuration+" years after "+(float)minDroughtDuration+" drought years: "
+				+(float)calc.getTotalEventProbAfterDroughtYears(forecastMinMag, minDroughtDuration, forecastDuration));
+		System.out.println("Poisson (time independent) prob M>="+(float)forecastMinMag+" in "+(float)forecastDuration+" years: "
+				+(float)calc.getTimeIndependentProb(forecastMinMag, forecastDuration));
+		// Additional probability outputs from FAST
+		System.out.println("Time independent prob M>="+(float)forecastMinMag+" of being in a drought for "+(float)minDroughtDuration+" years: "
+				+(float)calc.getTimeIndependentDroughtYearsProb(forecastDuration));
+		System.out.println("Time independent prob M>="+(float)forecastMinMag+" in an at least "+(float)minDroughtDuration+" year drought: "
+				+(float)calc.getTimeIndependentDroughtProb(forecastDuration));
+		
+		
+		float probRatio = ((float)calc.getTotalEventProbAfterDroughtYears(forecastMinMag, minDroughtDuration, forecastDuration))/((float)calc.getTimeIndependentProb(forecastMinMag, forecastDuration));
+		
+		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio);
+		
+		}
 
 }
