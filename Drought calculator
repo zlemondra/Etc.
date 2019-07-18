@@ -352,10 +352,10 @@ public class DroughtCalculator {
 		//
 		// Similar for the fault input file. It's name will be listed in the 'faultFname' field in the parameter
 		// file. It will typically end with ".in" or ".flt"
-		File catalogDir = new File("C:\\Users\\zledr\\OneDrive\\Desktop\\SCEC\\bruce_catalog");
+		File catalogDir = new File("\\\\scecinternvault.usc.edu\\2019\\Catalogs2019\\Catalogs\\Cat_800K_1500K");
 		// on windows, this would look something like: new File("C:\\Users\\intern\\<sub-dirs>...\\<catalog-dir>"
 
-		RSQSimCatalog catalog = new RSQSimCatalog(catalogDir, "eqs.teamvandg.out",
+		RSQSimCatalog catalog = new RSQSimCatalog(catalogDir, "eqs.Cat_800K_1500K.out",
 				FaultModels.FM3_1, DeformationModels.GEOLOGIC);
 		// UCERF3 fault and deformation model used as input to the simulation
 		// so far all have been FM 3.1/GEOLOGIC, you likely won't change these
@@ -370,12 +370,12 @@ public class DroughtCalculator {
 		double droughtMinMag4 = 6.5;
 		double minDroughtDuration4 = 100d;
 		double forecastDuration4 = 30d;
-		thirtySitesDrought droughtType4 = new thirtySitesDrought(droughtMinMag4, catalog);
+		thirtySitesDroughtType droughtType4 = new thirtySitesDroughtType(catalog);
 
-		// you'll almost always want to filter them as they are loaded to reduce memory requirements.
+		//  you'll almost always want to filter them as they are loaded to reduce memory requirements.
 		// set this as high as you can to do what you need
 		loader.minMag(Math.min(forecastMinMag4, droughtMinMag4));
-
+		
 		// we usually skip the first 5k years to avoid spin up time
 		//loader.skipYears(5000);
 		
@@ -383,8 +383,8 @@ public class DroughtCalculator {
 		System.out.println("Loading catalog...");
 		
 		
-		List<RSQSimEvent> events4 = loader.load();
-		events4 = droughtType4.systemSorter(events4, loader);
+		List<RSQSimEvent> events = loader.load();
+		List<RSQSimEvent>events4 = events;
 		System.out.println("Loaded "+events4.size()+" events");
 		
 		DroughtCalculator calc4 = new DroughtCalculator(catalog.getElements(), events4, droughtType4);
@@ -416,7 +416,7 @@ public class DroughtCalculator {
 		double droughtMinMag3 = 6.5;
 		double minDroughtDuration3 = 100d;
 		double forecastDuration3 = 30d;
-		FiveSitesDrought droughtType3 = new FiveSitesDrought(droughtMinMag3, catalog);
+		fiveSitesDroughtType droughtType3 = new fiveSitesDroughtType( catalog);
 
 		// you'll almost always want to filter them as they are loaded to reduce memory requirements.
 		// set this as high as you can to do what you need
@@ -429,8 +429,8 @@ public class DroughtCalculator {
 		System.out.println("Loading catalog...");
 		
 		
-		List<RSQSimEvent> events3 = loader.load();
-		events3 = droughtType3.systemSorter(events3, loader);
+		List<RSQSimEvent> events3 = events;
+		
 		System.out.println("Loaded "+events3.size()+" events");
 		
 		DroughtCalculator calc3 = new DroughtCalculator(catalog.getElements(), events3, droughtType3);
@@ -473,7 +473,7 @@ public class DroughtCalculator {
 		double droughtMinMag2 = 7.0;
 		double minDroughtDuration2 = 100d;
 		double forecastDuration2 = 30d;
-		sanAndreasFaultSystemDrought droughtType2 = new sanAndreasFaultSystemDrought(droughtMinMag2, catalog);
+		SanAndreasSystemDroughtType droughtType2 = new SanAndreasSystemDroughtType(catalog);
 
 		// you'll almost always want to filter them as they are loaded to reduce memory requirements.
 		// set this as high as you can to do what you need
@@ -486,8 +486,7 @@ public class DroughtCalculator {
 		System.out.println("Loading catalog...");
 		
 		
-		List<RSQSimEvent> events2 = loader.load();
-		events2 = droughtType2.systemSorter(events2, loader);
+		List<RSQSimEvent> events2 = events;
 		System.out.println("Loaded "+events2.size()+" events");
 		
 		DroughtCalculator calc2 = new DroughtCalculator(catalog.getElements(), events2, droughtType2);
@@ -533,7 +532,7 @@ public class DroughtCalculator {
 		System.out.println("Loading catalog...");
 		
 		
-		List<RSQSimEvent> events = loader.load();
+		//List<RSQSimEvent> events1 = events;
 		System.out.println("Loaded "+events.size()+" events");
 		
 		DroughtCalculator calc = new DroughtCalculator(catalog.getElements(), events, droughtType);
