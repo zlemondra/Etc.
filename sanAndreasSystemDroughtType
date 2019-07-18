@@ -1,0 +1,15 @@
+package org.scec.useit.forecasting.droughts;
+
+import java.io.IOException;
+
+import scratch.kevin.simulators.RSQSimCatalog;
+
+public class SanAndreasSystemDroughtType extends FaultSectionDroughtType {
+
+	public SanAndreasSystemDroughtType(RSQSimCatalog catalog)
+			throws IOException {
+		super("San Andreas Fault System", catalog, true, 653, 654, 655, 657, 658, 32, 285, 300, 287, 286, 301, 282, 283, 284, 295,651, 639, 638, 637,101,99,
+				28, 101, 99, 28, 236,296,402,299,102,103) ;
+	}
+
+}
