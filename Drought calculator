@@ -335,6 +335,21 @@ public class DroughtCalculator {
 		return (totTimeInDrought)/totalCatalogDuration;
 	}
 	
+	
+	public  double getProbOfDroughtEnding(double minDuration, double forcastDuration) {
+		double occurrence = 0, event =0;
+		for (DroughtPeriod drought : droughts) {
+			if (drought.getDuration() >= minDuration) {
+				occurrence++;
+				if(drought.getDuration() <= minDuration+forcastDuration) {
+					event++;
+				}
+			}
+		}System.out.println(event+" "+ occurrence);
+		double x =event/occurrence;
+		return x ;
+	}
+	
 	public static void main(String[] args) throws IOException {
 		// input catalog dir. At a minimum, this directory must contain the following 6 files
 		// 		<prefix>.dList
@@ -346,13 +361,13 @@ public class DroughtCalculator {
 		// 
 		// The prefix for the 4 list files can be empty, so those files
 		// could be called simply .pList, .eList, etc...
-		// 
+		//  
 		// There is no convention for the name of the parameter file, except that is usually ends in ".in,"
 		// though there can be multiple ".in" files and you'll need to make sure that the correct one is there.
 		//
 		// Similar for the fault input file. It's name will be listed in the 'faultFname' field in the parameter
 		// file. It will typically end with ".in" or ".flt"
-		File catalogDir = new File("\\\\scecinternvault.usc.edu\\2019\\Catalogs2019\\Catalogs\\Cat_800K_1500K");
+		File catalogDir = new File("\\\\scecinternvault.usc.edu\\2019\\Catalogs2019\\Catalogs\\Cat_800K_1500K");// 
 		// on windows, this would look something like: new File("C:\\Users\\intern\\<sub-dirs>...\\<catalog-dir>"
 
 		RSQSimCatalog catalog = new RSQSimCatalog(catalogDir, "eqs.Cat_800K_1500K.out",
@@ -363,7 +378,7 @@ public class DroughtCalculator {
 		// now load the events using catalog.loader()
 		Loader loader = catalog.loader();
 		
-		/** Definition 4: thirty Paleoseismic sites**/
+		/** Definition 4: thirty Paleoseismic sites **/
 		
 		
 		double forecastMinMag4 = 6.5d;
@@ -409,6 +424,8 @@ public class DroughtCalculator {
 		float probRatio4 = ((float)calc4.getTotalEventProbAfterDroughtYears(forecastMinMag4, minDroughtDuration4, forecastDuration4))/((float)calc4.getTimeIndependentProb(forecastMinMag4, forecastDuration4));
 		
 		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio4);
+		System.out.println("Probability of Drought ending within next 30 years: " + calc4.getProbOfDroughtEnding( minDroughtDuration4,forecastDuration4));
+		
 		/** Definition 3: Five Paleoseismic sites**/
 		
 		
@@ -456,7 +473,7 @@ public class DroughtCalculator {
 		
 		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio3);
 		
-		
+		System.out.println("Probability of Drought ending within next 30 years: " + calc3.getProbOfDroughtEnding( minDroughtDuration3,forecastDuration3));
 		
 		
 		
@@ -511,6 +528,7 @@ public class DroughtCalculator {
 		float probRatio2 = ((float)calc2.getTotalEventProbAfterDroughtYears(forecastMinMag2, minDroughtDuration2, forecastDuration2))/((float)calc2.getTimeIndependentProb(forecastMinMag2, forecastDuration2));
 		
 		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio2);
+		System.out.println("Probability of Drought ending within next 30 years: " + calc2.getProbOfDroughtEnding( minDroughtDuration2,forecastDuration2));
 	
 		
 		
@@ -557,6 +575,8 @@ public class DroughtCalculator {
 		float probRatio = ((float)calc.getTotalEventProbAfterDroughtYears(forecastMinMag, minDroughtDuration, forecastDuration))/((float)calc.getTimeIndependentProb(forecastMinMag, forecastDuration));
 		
 		System.out.println("The ratio of the time independent prob versus the time dependent prob is " + probRatio);
+		
+		System.out.println("Probability of Drought ending within next 30 years: " + calc.getProbOfDroughtEnding( minDroughtDuration,forecastDuration));
 		
 		}
 
