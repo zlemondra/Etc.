@@ -1,125 +1,15 @@
 package org.scec.useit.forecasting.droughts;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.opensha.commons.param.ParameterList;
-import org.opensha.commons.param.impl.DoubleParameter;
-import org.opensha.refFaultParamDb.vo.FaultSectionPrefData;
-import org.opensha.sha.simulators.RSQSimEvent;
-import org.opensha.sha.simulators.SimulatorEvent;
-import org.opensha.sha.simulators.utils.RSQSimSubSectionMapper;
-import org.opensha.sha.simulators.utils.RSQSimSubSectionMapper.SubSectionMapping;
-
-import com.google.common.base.Preconditions;
-
-import scratch.UCERF3.utils.paleoRateConstraints.PaleoRateConstraint;
-import scratch.UCERF3.utils.paleoRateConstraints.UCERF3_PaleoRateConstraintFetcher;
 import scratch.kevin.simulators.RSQSimCatalog;
-import scratch.kevin.simulators.RSQSimCatalog.Loader;
 
-public class FiveSitesDrought implements DroughtType{
-	private ParameterList params;
-	//List<RSQSimEvent> events = null;
-	private DoubleParameter minMagParam;
-	private String sectionName = "Five Paleoseisemic Sites Drought Definiton";
-	private double mag, duration; private Loader loader;
-	//private int SAF = 0, SJF= 0, HAY=0; 
-	RSQSimCatalog catalog;
-	int SectID = 0;
+public class fiveSitesDroughtType extends FaultSectionDroughtType {
 
-	public FiveSitesDrought(double minMag,RSQSimCatalog cat ) {
-		params = new ParameterList();
-		minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
-		minMagParam.setValue(minMag);
-		params.addParameter(minMagParam);
-		this.catalog = cat;
-	}
-	public List<RSQSimEvent> systemSorter(List<RSQSimEvent> events, Loader loader) throws IOException {
-		for (int i = 0; i< events.size(); i++) {
-			RSQSimEvent event = events.get(i);
-			setID(event);
-			boolean fil = filter(SectID);
-			//System.out.println(fil);
-			//System.out.println("Outside if: "+ SectID);
-			if(fil == false) {
-				//System.out.println("inside if: "+SectID);
-				events.remove(i);
-			}
-			
-		}
-		
-		return events;
-	}
-	public void setID(SimulatorEvent event) throws IOException{ //filter through the five sites. If a site is found then the event is set to true
-		List<FaultSectionPrefData> subSects;
-		double minFractForInclusion = 0.2;
-		subSects = catalog.getU3SubSects();
-		RSQSimSubSectionMapper mapper = new RSQSimSubSectionMapper(subSects, catalog.getElements(), minFractForInclusion);
-		List<List<SubSectionMapping>> mappings = mapper.getFilteredSubSectionMappings(event);
-		for (List<SubSectionMapping> sectionMappings : mappings) {
-			for (SubSectionMapping mapping : sectionMappings) {
-				FaultSectionPrefData subSect = mapping.getSubSect();
-				 this.SectID = subSect.getSectionId(); // this is the unique ID number for the fault section
-				//System.out.println(subSect.getSectionId() + subSect.getName());
-			}
-		}
-		/**ArrayList<PaleoRateConstraint> paleoData = UCERF3_PaleoRateConstraintFetcher.getConstraints(subSects);
-		for (PaleoRateConstraint constraint : paleoData) {
-			// this is the UCERF3 subsection index. can get compared mapping.getSubSect().getSectionId() from the above code
-			int subSectIndex = constraint.getSectionIndex();
-		}
-		List<PaleoRateConstraint> biasiScharerSites = new ArrayList<>();
-		for (PaleoRateConstraint constraint : paleoData) {
-			String name = constraint.getPaleoSiteName();
-			if (name.equals("S. San Andreas - Coachella") || name.equals("San Jacinto - Hog Lake")
-					|| name.equals("Frazier Mountian, SSAF") || name.equals("N. San Andreas - Santa Cruz Seg.")
-					|| name.equals("Hayward fault - South"))
-				{biasiScharerSites.add(constraint);
-				//SubSectionMapping m = (SubSectionMapping) mapper.getFilteredSubSectionMappings(event);
-				//FaultSectionPrefData subSect = m.getSubSect();
-				//System.out.println(name + constraint.getSectionIndex() );
-				x = true;} 
-		}
-		Preconditions.checkState(biasiScharerSites.size() == 5);**/
-		
-			
-		
-	}
-	public boolean filter(int id) {
-		boolean x = false;
-		switch(id) {
-			case 1778:
-				x = true;
-			case 1799:
-				x = true;
-			case 2156:
-				x= true;
-			case 1970:
-				x = true;
-			case 831:
-				x = true;
-		}
-		return x;
+	public fiveSitesDroughtType(RSQSimCatalog catalog)
+			throws IOException  {
+		super("Five Paleoseismic Sites", catalog, false, 1778, 1799, 2156, 1970, 831);
+		// TODO Auto-generated constructor stub
 	}
 
-	
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return sectionName;
-	}
-
-	@Override
-	public boolean doesEventEndDrought(SimulatorEvent event) {
-		// TODO Auto-generated method stub
-		return event.getMagnitude() >= minMagParam.getValue();
-	}
-
-	@Override
-	public ParameterList getParameters() {
-		// TODO Auto-generated method stub
-		return params;
-	}
 }
