@@ -1,147 +1,18 @@
 package org.scec.useit.forecasting.droughts;
 
 import java.io.IOException;
-import java.util.List;
-
-import org.opensha.commons.param.ParameterList;
-import org.opensha.commons.param.impl.DoubleParameter;
-import org.opensha.refFaultParamDb.vo.FaultSectionPrefData;
-import org.opensha.sha.simulators.RSQSimEvent;
-import org.opensha.sha.simulators.SimulatorEvent;
-import org.opensha.sha.simulators.utils.RSQSimSubSectionMapper;
-import org.opensha.sha.simulators.utils.RSQSimSubSectionMapper.SubSectionMapping;
 
 import scratch.kevin.simulators.RSQSimCatalog;
-import scratch.kevin.simulators.RSQSimCatalog.Loader;
 
-public class thirtySitesDrought implements DroughtType{
-	private ParameterList params;
-	//List<RSQSimEvent> events = null;
-	private DoubleParameter minMagParam;
-	private String sectionName = "Thirty Paleoseisemic Sites Drought Definiton";
-	private double mag, duration; private Loader loader;
-	//private int SAF = 0, SJF= 0, HAY=0; 
-	RSQSimCatalog catalog;
-	int SectID = 0;
+public class thirtySitesDroughtType extends FaultSectionDroughtType {
 
-	public thirtySitesDrought(double minMag,RSQSimCatalog cat ) {
-		params = new ParameterList();
-		minMagParam = new DoubleParameter("Minimum Magnitude", 0d, 10d);
-		minMagParam.setValue(minMag);
-		params.addParameter(minMagParam);
-		this.catalog = cat;
-	}
-	public List<RSQSimEvent> systemSorter(List<RSQSimEvent> events, Loader loader) throws IOException {
-		for (int i = 0; i< events.size(); i++) {
-			RSQSimEvent event = events.get(i);
-			setID(event);
-			boolean fil = filter(SectID);
-			//System.out.println(fil);
-			//System.out.println("Outside if: "+ SectID);
-			if(fil == false) {
-				//System.out.println("inside if: "+SectID);
-				events.remove(i);
-			}
-			
-		}
-		
-		return events;
-	}
-	public void setID(SimulatorEvent event) throws IOException{ //filter through the five sites. If a site is found then the event is set to true
-		List<FaultSectionPrefData> subSects;
-		double minFractForInclusion = 0.2;
-		subSects = catalog.getU3SubSects();
-		RSQSimSubSectionMapper mapper = new RSQSimSubSectionMapper(subSects, catalog.getElements(), minFractForInclusion);
-		List<List<SubSectionMapping>> mappings = mapper.getFilteredSubSectionMappings(event);
-		for (List<SubSectionMapping> sectionMappings : mappings) {
-			for (SubSectionMapping mapping : sectionMappings) {
-				FaultSectionPrefData subSect = mapping.getSubSect();
-				 this.SectID = subSect.getSectionId(); 
-			}
-		}	
-	}
-	public boolean filter(int id) {
-		boolean x = false;
-		switch(id) {
-			case 1778:
-				x = true;
-			case 1799:
-				x = true;
-			case 2156:
-				x= true;
-			case 1970:
-				x = true;
-			case 831:
-				x = true;
-			case 207:
-				x = true;
-			case 343:
-				x = true;
-			case 518:
-				x= true;
-			case 525:
-				x = true;
-			case 535:
-				x = true;
-			case 2588:
-				x = true;
-			case 600:
-				x = true;
-			case 682:
-				x= true;
-			case 778:
-				x = true;
-			case 821:
-				x = true;
-			case 1892:
-				x = true;
-			case 1880:
-				x = true;
-			case 1867:
-				x= true;
-			case 1904:
-				x = true;
-			case 1636:
-				x = true;
-			case 2123:
-				x = true;
-			case 1725:
-				x = true;
-			case 2192:
-				x= true;
-			case 1780:
-				x = true;
-			case 1956:
-				x = true;
-			case 1846:
-				x = true;
-			case 1946:
-				x = true;
-			case 1951:
-				x= true;
-			case 1957:
-				x = true;
-			case 1850:
-				x = true;
-				
-		}
-		return x;
-	}
-
-
-	@Override
-	public String getName() {
-		return sectionName;
-	}
-
-	@Override
-	public boolean doesEventEndDrought(SimulatorEvent event) {
-		return event.getMagnitude() >= minMagParam.getValue();
-	}
-
-	@Override
-	public ParameterList getParameters() {
-		return params;
+	public thirtySitesDroughtType(RSQSimCatalog catalog)
+			throws IOException  {
+		super("30 Paleoseismic sites", catalog, false, 343, 518,525, 535, 2588,1778, 600, 628, 778
+				, 821, 831, 1892, 1970, 1880, 1867, 1904, 1636, 2123, 207, 1725, 2156, 2192, 1780, 1956
+				, 1799, 1846, 1946, 1951, 1957, 1850
+				);
+		// TODO Auto-generated constructor stub
 	}
 
 }
