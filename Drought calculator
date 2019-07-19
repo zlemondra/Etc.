@@ -87,6 +87,20 @@ public class DroughtCalculator {
 		System.out.println("\tTotal duration: "+(float)totalDuration+" years");
 	}
 	
+	
+	
+	
+	public int getNumberOfMinMagEqs(double minMag) {
+		int counter = 0;
+		for(int i = 0; i < events.size(); i++) {
+			if(events.get(i).getMagnitude() > minMag){counter++;}
+		}
+		return counter;
+	}
+	
+	
+	
+	
 	/**
 	 * returns all droughts that are at least least minDurationYears years long
 	 * @param minDurationYears minimum drought duration
